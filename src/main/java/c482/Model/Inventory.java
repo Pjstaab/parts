@@ -4,8 +4,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class Inventory {
-    private static ObservableList<Part> allParts = FXCollections.observableArrayList();
-    private static ObservableList<Product> allProducts = FXCollections.observableArrayList();
+    private ObservableList<Part> allParts = FXCollections.observableArrayList();
+    private ObservableList<Product> allProducts = FXCollections.observableArrayList();
 
     /**
      * @param newPart
@@ -16,13 +16,20 @@ public class Inventory {
         }
     }
 
-    public static void addProduct(Product newProduct) {
+    /**
+     * @param newProduct
+     */
+    public void addProduct(Product newProduct) {
         if (newProduct != null) {
             allProducts.add(newProduct);
         }
     }
 
-    public static Part lookupPart(int partId) {
+    /**
+     * @param partId
+     * @return
+     */
+    public Part lookupPart(int partId) {
         for (Part p: allParts) {
             if (p.getId() == partId) {
                 return p;
@@ -31,7 +38,11 @@ public class Inventory {
         return null;
     }
 
-    public static Product lookupProduct(int productId) {
+    /**
+     * @param productId
+     * @return
+     */
+    public Product lookupProduct(int productId) {
         for (Product p: allProducts) {
             if (p.getId() == productId) {
                 return p;
@@ -40,7 +51,11 @@ public class Inventory {
         return null;
     }
 
-    public static Part lookupPart(String partName) {
+    /**
+     * @param partName
+     * @return
+     */
+    public Part lookupPart(String partName) {
         for (Part p: allParts) {
             if (p.getName() == partName) {
                 return p;
@@ -49,7 +64,11 @@ public class Inventory {
         return null;
     }
 
-    public static Product lookupProduct(String productName) {
+    /**
+     * @param productName
+     * @return
+     */
+    public Product lookupProduct(String productName) {
         for (Product p: allProducts) {
             if (p.getName() == productName) {
                 return p;
@@ -58,27 +77,49 @@ public class Inventory {
         return null;
     }
 
-    public static void updatePart(int index, Part selectedPart) {
+    /**
+     * @param index
+     * @param selectedPart
+     */
+    public void updatePart(int index, Part selectedPart) {
         allParts.set(index, selectedPart);
     }
 
-    public static void updateProduct(int index, Product newProduct) {
+    /**
+     * @param index
+     * @param newProduct
+     */
+    public void updateProduct(int index, Product newProduct) {
         allProducts.set(index, newProduct);
     }
 
-    public static boolean deletePart(Part selectedPart) {
+    /**
+     * @param selectedPart
+     * @return
+     */
+    public boolean deletePart(Part selectedPart) {
         return allParts.remove(selectedPart);
     }
 
-    public static boolean deleteProduct(Product selectedProduct) {
+    /**
+     * @param selectedProduct
+     * @return
+     */
+    public boolean deleteProduct(Product selectedProduct) {
         return allParts.remove(selectedProduct);
     }
 
-    public static ObservableList<Part> getAllParts() {
+    /**
+     * @return
+     */
+    public ObservableList<Part> getAllParts() {
         return allParts;
     }
 
-    public static ObservableList<Product> getAllProducts() {
+    /**
+     * @return
+     */
+    public ObservableList<Product> getAllProducts() {
         return allProducts;
     }
 }

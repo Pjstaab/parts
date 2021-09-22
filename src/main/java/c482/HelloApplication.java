@@ -1,5 +1,6 @@
 package c482;
 
+import c482.Controller.InventoryController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -29,10 +30,11 @@ public class HelloApplication extends Application {
         inventory.addProduct(new Product(2, "Door", 250.00, 57, 33, 98));
         inventory.addProduct(new Product(3, "Cabinet", 370.00, 89, 77, 245));
 
-
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-        Scene      scene      = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("Hello!");
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("MainInventory.fxml"));
+        Scene      scene      = new Scene(fxmlLoader.load(), 1024, 768);
+        stage.setTitle("Inventory");
+        InventoryController controller = fxmlLoader.getController();
+        controller.setInventory(inventory);
         stage.setScene(scene);
         stage.show();
     }
