@@ -8,10 +8,10 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -19,7 +19,7 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class InventoryController {
+public class InventoryController implements Initializable {
     //Parts
     @FXML
     private TableView<Part> partsTable;
@@ -46,7 +46,10 @@ public class InventoryController {
     private Button addPart;
 
     @FXML
-    private Button modifyPartScene;
+    private Button modifyPart;
+
+    @FXML
+    private Button deletePart;
 
     @FXML
     private Button modifyProduct;
@@ -101,26 +104,16 @@ public class InventoryController {
      * This method sets up the Parts table.
      */
     public void setPartsTable() {
-        partsTable.refresh();
-
         partsTable.setItems(this.inventory.getAllParts());
-        partId.setCellValueFactory(new PropertyValueFactory<Part, Integer>("id"));
-        partCost.setCellValueFactory(new PropertyValueFactory<Part, Double>("price"));
-        partLevel.setCellValueFactory(new PropertyValueFactory<Part, Integer>("stock"));
-        partName.setCellValueFactory(new PropertyValueFactory<Part, String>("name"));
+        partsTable.refresh();
     }
 
     /**
      * This method sets up the Products table.
      */
     public void setProductsTable() {
-
-        productsTable.refresh();
         productsTable.setItems(this.inventory.getAllProducts());
-        productId.setCellValueFactory(new PropertyValueFactory<Product, Integer>("id"));
-        productCost.setCellValueFactory(new PropertyValueFactory<Product, Double>("price"));
-        productLevel.setCellValueFactory(new PropertyValueFactory<Product, Integer>("stock"));
-        productName.setCellValueFactory(new PropertyValueFactory<Product, String>("name"));
+        productsTable.refresh();
     }
 
     /**
@@ -235,8 +228,8 @@ public class InventoryController {
     private void pushToAddPartsForm(ActionEvent event) throws IOException {
         Parent parent;
         Stage  stage;
-        stage = (Stage) modifyPartScene.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("AddPart.fxml"));
+        stage = (Stage) modifyPart.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/c482/AddPart.fxml"));
         parent = loader.load();
         Scene scene = new Scene(parent);
         stage.setScene(scene);
@@ -253,8 +246,8 @@ public class InventoryController {
     private void pushToAddProductsForm() throws IOException {
         Parent parent;
         Stage  stage;
-        stage = (Stage) modifyPartScene.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("AddProduct.fxml"));
+        stage = (Stage) modifyPart.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/c482/AddProduct.fxml"));
         parent = loader.load();
         Scene scene = new Scene(parent);
         stage.setScene(scene);
@@ -272,8 +265,8 @@ public class InventoryController {
             Part   selectedPart = partsTable.getSelectionModel().getSelectedItem();
             Parent parent;
             Stage  stage;
-            stage = (Stage) modifyPartScene.getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("ModifyPart.fxml"));
+            stage = (Stage) modifyPart.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/c482/ModifyPart.fxml"));
             parent = loader.load();
             Scene scene = new Scene(parent);
             stage.setScene(scene);
@@ -308,7 +301,7 @@ public class InventoryController {
             Parent  parent;
             Stage   stage;
             stage = (Stage) modifyProduct.getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("ModifyProduct.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/c482/ModifyProduct.fxml"));
             parent = loader.load();
             Scene scene = new Scene(parent);
             stage.setScene(scene);

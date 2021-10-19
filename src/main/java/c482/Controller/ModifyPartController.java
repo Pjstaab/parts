@@ -117,7 +117,7 @@ public class ModifyPartController implements Initializable {
     }
 
     /**
-     * This method intitalizes the Moodify Part Controller.
+     * This method initializes the Modify Part Controller.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
