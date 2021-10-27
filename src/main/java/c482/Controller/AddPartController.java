@@ -1,6 +1,6 @@
 /**
 
-  @author: Brown oichoe
+  @author: Pierce Staab
    The Add Part form
    This class creates a new part and adds it to the inventory
 

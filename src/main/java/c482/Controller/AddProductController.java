@@ -1,6 +1,6 @@
 /**
 
-  @author: Brown oichoe
+  @author: Pierce Staab
   The Add Product from
   This class creates a new product and adds it to the inventory
 

@@ -1,5 +1,5 @@
 /**
- * @author: Brown oichoe
+ * @author: Pierce Staab
  * The Modify product form
  */
 

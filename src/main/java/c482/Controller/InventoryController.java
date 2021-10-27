@@ -9,6 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -261,17 +262,18 @@ public class InventoryController implements Initializable {
      */
     @FXML
     private void pushToModifyPartsForm(ActionEvent event) throws IOException {
-        if (partsTable.getSelectionModel().getSelectedItem() != null) {
-            Part   selectedPart = partsTable.getSelectionModel().getSelectedItem();
-            Parent parent;
-            Stage  stage;
-            stage = (Stage) modifyPart.getScene().getWindow();
+        Part   selectedPart = partsTable.getSelectionModel().getSelectedItem();
+        if (selectedPart != null) {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/c482/ModifyPart.fxml"));
-            parent = loader.load();
+            ModifyPartController controller = new ModifyPartController(inventory, selectedPart);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            loader.setController(controller);
+            Parent parent = loader.load();
             Scene scene = new Scene(parent);
+
             stage.setScene(scene);
             stage.setTitle("Modify Part");
-            ModifyPartController controller = loader.getController();
+
             controller.setPart(selectedPart);
             controller.getInventory(inventory);
         } else {

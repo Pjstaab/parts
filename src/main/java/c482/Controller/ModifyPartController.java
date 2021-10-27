@@ -1,5 +1,5 @@
 /**
- * @author: Brown oichoe
+ * @author: Pierce Staab
  * Modify Part Controller
  */
 
@@ -69,6 +69,11 @@ public class ModifyPartController implements Initializable {
     Part part;
     Inventory inventory;
 
+    public ModifyPartController(Inventory inventory, Part part) {
+        this.inventory = inventory;
+        this.part = part;
+    }
+
     /**
      * This sets up the part in the correct text fields to be  modified by user.
      *
@@ -86,7 +91,6 @@ public class ModifyPartController implements Initializable {
         partInv.setText(Integer.toString(this.part.getStock()));
 
         if (this.part instanceof InHousePart) {
-
             radioInHouse.setSelected(true);
             radioOutsourced.setSelected(false);
             InHousePart inHousePart = (InHousePart) this.part;
