@@ -52,6 +52,8 @@ public class Inventory {
     }
 
     /**
+     * This function looks up parts. One issue was the case sensitivity of the compare so I had to force things to
+     * lowercase to get it to work.
      * @param partName
      * @return
      */
@@ -65,6 +67,7 @@ public class Inventory {
     }
 
     /**
+     * This looks up products. Same thing with parts and stuff being lowercase
      * @param productName
      * @return
      */
@@ -78,6 +81,7 @@ public class Inventory {
     }
 
     /**
+     * This updates a part with new data
      * @param index
      * @param selectedPart
      */
@@ -86,6 +90,7 @@ public class Inventory {
     }
 
     /**
+     * This updates a product with new data
      * @param index
      * @param newProduct
      */
@@ -94,6 +99,7 @@ public class Inventory {
     }
 
     /**
+     * This deletes a part
      * @param selectedPart
      * @return
      */
@@ -106,6 +112,7 @@ public class Inventory {
     }
 
     /**
+     * This deletes a product
      * @param selectedProduct
      * @return
      */
@@ -114,6 +121,7 @@ public class Inventory {
     }
 
     /**
+     * This returns a list of all of the parts
      * @return
      */
     public ObservableList<Part> getAllParts() {
@@ -121,6 +129,7 @@ public class Inventory {
     }
 
     /**
+     * This returns a list of all of the products
      * @return
      */
     public ObservableList<Product> getAllProducts() {

@@ -27,9 +27,8 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
- * This class provides functionality to modify and edit a arts features.
+ * This class provides functionality to modify and edit parts.
  */
-
 public class ModifyPartController implements Initializable {
 
     @FXML
@@ -71,13 +70,18 @@ public class ModifyPartController implements Initializable {
     Part part;
     Inventory inventory;
 
+    /**
+     * This is the constructor for the modify part screen and sets the inventory and part at the same time
+     * @param inventory This is the inventory
+     * @param part This is the selected part to be modified
+     */
     public ModifyPartController(Inventory inventory, Part part) {
         this.inventory = inventory;
         this.part = part;
     }
 
     /**
-     * This sets up the part in the correct text fields to be  modified by user.
+     * This sets up the part in the correct text fields to be modified by user.
      *
      * @param part This is the selected part to be modified
      */
@@ -119,7 +123,7 @@ public class ModifyPartController implements Initializable {
     }
 
     /**
-     * This method initializes the Modify Part Controller.
+     * This method initializes the modify Part Controller.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -130,7 +134,6 @@ public class ModifyPartController implements Initializable {
                 textField.setText(newWord);
                 setValues(textField);
             } catch (NumberFormatException e) {
-                System.out.println("I got you error");
             }
         }));
     }
@@ -139,7 +142,7 @@ public class ModifyPartController implements Initializable {
     /**
      * This method gets user input and updates the required fields.
      *
-     * @param ts This is a textfield that has been selected by user to update info
+     * @param ts This is a text field that has been selected by user to update info
      */
     public void setValues(TextField ts) {
         if (ts.getId().equals(partId.getId())) {
@@ -189,7 +192,7 @@ public class ModifyPartController implements Initializable {
     }
 
     /**
-     * This method listens to the inhouse radio-listener to set the correct source.
+     * This method listens to the inHouse radio-listener to set the correct source.
      */
     @FXML
     private void inHouseListener() {
@@ -219,6 +222,7 @@ public class ModifyPartController implements Initializable {
     /**
      * This method cancels the part add form if nothing is done
      * and returns to main view.
+     * @param event
      */
     @FXML
     private void hideModifyPartsForm(ActionEvent event) {
@@ -228,7 +232,7 @@ public class ModifyPartController implements Initializable {
         Alert alert = new Alert(Alert.AlertType.WARNING,
                 "Are you sure you want to cancel modifying a part?", OK, CANCEL);
 
-        alert.setTitle("Exit the Modify Part Form");
+        alert.setTitle("Exit the modify Part Form");
         Optional<ButtonType> result = alert.showAndWait();
         result.ifPresent(res -> {
             if (res.equals(OK)) {
@@ -245,6 +249,11 @@ public class ModifyPartController implements Initializable {
 
     }
 
+    /**
+     * This returns the user to the main screen
+     * @param event
+     * @param part
+     */
     @FXML
     private void mainScreen(ActionEvent event, Part part) {
         try {
@@ -265,13 +274,14 @@ public class ModifyPartController implements Initializable {
 
     /**
      * This method saves the modified part and pushes it to the main controller to be updated.
+     * @param event 
      */
     @FXML
     private void saveModifiedPart(ActionEvent event) {
         List<TextField> textFields = Arrays.asList(partName, partInv, partMax, partMin, partMachineId, partPrice);
         if (!checkIfEmpty(textFields)) {
             if (validationPassed(textFields)) {
-                if (checkMinMAxInv(Integer.parseInt(partMin.getText()), Integer.parseInt(partMax.getText()), Integer.parseInt(partInv.getText()))) {
+                if (checkMinMaxInv(Integer.parseInt(partMin.getText()), Integer.parseInt(partMax.getText()), Integer.parseInt(partInv.getText()))) {
                     try {
                         mainScreen(event, part);
                     } catch (IndexOutOfBoundsException e) {
@@ -291,7 +301,8 @@ public class ModifyPartController implements Initializable {
     }
 
     /**
-     * This is a warning dialog box.
+     * This creates an alert box with custom text
+     * @param err
      */
     private void alertBox(String err) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -304,6 +315,7 @@ public class ModifyPartController implements Initializable {
 
     /**
      * This method checks that the textfields are not empty.
+     * @param ts This is a text field that has been selected by user to update info
      */
     @FXML
     private boolean checkIfEmpty(List<TextField> ts) {
@@ -319,15 +331,14 @@ public class ModifyPartController implements Initializable {
     }
 
     /**
-     * This method is part of the validation -methods checks for the input values for max,min and inv
-     * max>inv>min
-     *
-     * @returns boolean.
+     * This method makes sure that the inventory is between the min and the max and that the min isn't more than max
+     * @param min
+     * @param max
+     * @param inv
+     * @return
      */
-
     @FXML
-    private boolean checkMinMAxInv(int min, int max, int inv) {
-
+    private boolean checkMinMaxInv(int min, int max, int inv) {
         if (inv >= min) {
             return max > inv;
         } else {
@@ -336,6 +347,10 @@ public class ModifyPartController implements Initializable {
 
     }
 
+    /**
+     * @param ts Text field to be validated
+     * @return
+     */
     @FXML
     private boolean validationPassed(List<TextField> ts) {
         boolean isValid = true;
@@ -371,5 +386,4 @@ public class ModifyPartController implements Initializable {
 
         return isValid;
     }
-
 }

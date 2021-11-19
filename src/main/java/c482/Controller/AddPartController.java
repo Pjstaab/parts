@@ -58,6 +58,10 @@ public class AddPartController implements Initializable {
     Inventory inventory;
     private int Id;
 
+    /**
+     * This is the constructor for adding parts and sets the inventory at the same time
+     * @param inv
+     */
     AddPartController(Inventory inv) {
         inventory = inv;
     }
@@ -67,13 +71,14 @@ public class AddPartController implements Initializable {
      *
      * @param v This is an inventory item
      */
-
     public void setInventory(Inventory v) {
         this.inventory = v;
     }
 
     /**
-     * This method initializes the controller.
+     * This method initializes the controller
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -84,6 +89,7 @@ public class AddPartController implements Initializable {
     /**
      * This method listens for the inhouse radiobutton
      * and assigns the correct labels.
+     * @param event
      */
     @FXML
     private void inHouseListener(ActionEvent event) {
@@ -97,6 +103,7 @@ public class AddPartController implements Initializable {
     /**
      * This method listens for the outsourced radiobutton
      * and assigns the correct labels.
+     * @param event
      */
     @FXML
     private void outSourcedListener(ActionEvent event) {
@@ -112,8 +119,9 @@ public class AddPartController implements Initializable {
 
     /**
      * This method loads the main view and returns part to inventory.
+     * @param event
      */
-    private void AddPart(ActionEvent event) throws IOException {
+    private void AddPart(ActionEvent event) {
         mainScreen(event);
     }
 
@@ -121,6 +129,7 @@ public class AddPartController implements Initializable {
     /**
      * This method cancels the part add form if nothing is done
      * and returns to main view.
+     * @param event
      */
     public void hideAddPartsForm(ActionEvent event) {
         ButtonType OK = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
@@ -141,8 +150,8 @@ public class AddPartController implements Initializable {
 
     /**
      * This method gets the input from the user,validates inputs  and adds it to the inventory.
+     * @param event
      */
-
     @FXML
     private void addedPart(ActionEvent event) throws IOException {
         List<TextField> textFields = Arrays.asList(partName, partPrice, partInv, partMin, partMax, partMachineId);
@@ -193,7 +202,8 @@ public class AddPartController implements Initializable {
 
 
     /**
-     * This is a warning dialog box.
+     * This creates an alert box with custom text
+     * @param err
      */
     private void alertBox(String err) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -206,7 +216,9 @@ public class AddPartController implements Initializable {
 
 
     /**
-     * This method checks that the textfields are not empty.
+     * This checks text boxes if they are empty
+     * @param ts This is a text field that has been selected by user to update info
+     * @return
      */
     @FXML
     private boolean checkIfEmpty(List<TextField> ts) {
@@ -220,9 +232,10 @@ public class AddPartController implements Initializable {
     }
 
     /**
-     * This method validates strings and integers and doubles as the needed inputs.
+     * This validates the input of fields
+     * @param ts This is a text field that has been selected by user to update info
+     * @return
      */
-
     @FXML
     private boolean validationPassed(List<TextField> ts) {
 
@@ -259,16 +272,15 @@ public class AddPartController implements Initializable {
     }
 
     /**
-     * This method generates unique ids for the parts.
+     * This generates a random id for parts
+     * @return
      */
-
     @FXML
     private Integer generateUniqueNumber() {
         Random ints = new Random();
         int Id = ints.nextInt(999999);
 
         inventory.getAllParts().forEach((item) -> {
-
             if (item.getId() == Id) {
                 ints.nextInt();
             }
@@ -293,6 +305,10 @@ public class AddPartController implements Initializable {
         }
     }
 
+    /**
+     * This takes the suer back to the main screen
+     * @param event
+     */
     @FXML
     private void mainScreen(ActionEvent event) {
         try {

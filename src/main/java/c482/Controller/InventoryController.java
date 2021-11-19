@@ -79,10 +79,18 @@ public class InventoryController implements Initializable {
 
     Inventory inventory;
 
+    /**
+     * This sets the current inventory
+     * @param inventory
+     */
     public void setInventory(Inventory inventory) {
         this.inventory = inventory;
     }
 
+    /**
+     * This sets the selected part in the inventory
+     * @param part
+     */
     public void setSelectedPart(Part part) {
         ObservableList<Part> parts = inventory.getAllParts();
         for (Part updatedPart : parts) {
@@ -92,6 +100,10 @@ public class InventoryController implements Initializable {
         }
     }
 
+    /**
+     * This sets the selected product in the inventory
+     * @param product
+     */
     public void setSelectedProduct(Product product) {
         ObservableList<Product> products = inventory.getAllProducts();
         for (Product updatedProduct : products) {
@@ -128,7 +140,7 @@ public class InventoryController implements Initializable {
     }
 
     /**
-     * This method initializes the search function and returns the typed Product input if found.
+     * This method initializes the search function and returns the typed product info if it's found
      */
     public void SearchProduct() {
         productSearchField.textProperty().addListener((Obs, oldText, newText) -> {
@@ -157,16 +169,6 @@ public class InventoryController implements Initializable {
 
     /**
      * This method initializes the search function and returns the typed Parts input if found.
-     * <p>
-     * Part G a: This function can result in a logical error where a user is not able to search for both
-     * products using name and id correctly. First, it can result in a number exception error, a return of the
-     * wrong item or no items, or cause the data not to be populated.To fix this - add a listener to the search_field
-     * to listen for changes, initialize an empty observable array to hold the return values-This is helpful because
-     * searching with an part Id only returns a part and the tableview only accepts observable lists Then include the
-     * isNumeric function to determine whether the input is a digit or string so that we can use the appropriate functions.
-     * Check whether the search_field is empty to avoid the number exception error when trying to convert it to integer.
-     * To synchronize both part id and name - add the id to an observable list and return a specific item - The lookup
-     * part overloaded method returns a specific instance while the name returns a List.
      */
     public void SearchParts() {
         partSearchField.textProperty().addListener((Obs, oldText, newText) -> {
@@ -182,7 +184,6 @@ public class InventoryController implements Initializable {
                 } else {
                     foundItems.add(part);
                     partsTable.setItems(foundItems);
-
                 }
 
             } else if (!isNumeric(partSearchField.getText()) && !partSearchField.getText().isEmpty()) {
@@ -197,7 +198,7 @@ public class InventoryController implements Initializable {
     }
 
     /**
-     * validates digit inputs.
+     * Validates digit inputs.
      *
      * @param str - The value to be checked  if numeric
      * @return boolean
@@ -211,7 +212,9 @@ public class InventoryController implements Initializable {
     }
 
     /**
-     * This method pushes to the Add parts form.
+     * This function brings the user to the add parts form
+     * @param event
+     * @throws IOException
      */
     @FXML
     private void pushToAddPartsForm(ActionEvent event) throws IOException {
@@ -226,9 +229,10 @@ public class InventoryController implements Initializable {
     }
 
     /**
-     * This method pushes to the Add products form.
+     * This function brings the user to the add products form
+     * @param event
+     * @throws IOException
      */
-
     @FXML
     private void pushToAddProductsForm(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/c482/AddProduct.fxml"));
@@ -242,7 +246,9 @@ public class InventoryController implements Initializable {
     }
 
     /**
-     * This method pushes to the Modify Parts form.
+     * This function brings the user to the modify parts form
+     * @param event
+     * @throws IOException
      */
     @FXML
     private void pushToModifyPartsForm(ActionEvent event) throws IOException {
@@ -264,9 +270,9 @@ public class InventoryController implements Initializable {
             alertBox("Please select Part to Modify");
         }
     }
-
     /**
-     * This is a warning dialog box.
+     * This creates an alert box with custom text
+     * @param err
      */
     private void alertBox(String err) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -278,7 +284,7 @@ public class InventoryController implements Initializable {
     }
 
     /**
-     * This method pushes to the Modify Products form.
+     * This method pushes to the modify products form.
      */
     @FXML
     private void pushToModifyProductsForm(ActionEvent event) throws IOException {
@@ -302,7 +308,8 @@ public class InventoryController implements Initializable {
     }
 
     /**
-     * This a Button function that deletes a part from the tableview and the partlist.
+     * This deletes a part from the inventory and updates the table
+     * @param event
      */
     @FXML
     private void deletePart(ActionEvent event) {
@@ -318,7 +325,8 @@ public class InventoryController implements Initializable {
     }
 
     /**
-     * This a Button function that deletes a product from the tableview and the product list.
+     * This deletes a product from the inventory and updates the table
+     * @param event
      */
     @FXML
     private void deleteProduct(ActionEvent event) {
@@ -332,7 +340,6 @@ public class InventoryController implements Initializable {
             } else {
                 alertBox("Product has Associated Parts Cannot be Deleted");
             }
-
         } else {
             alertBox("Please select product to delete");
         }
@@ -348,7 +355,7 @@ public class InventoryController implements Initializable {
         Alert alert = new Alert(Alert.AlertType.WARNING,
                 "Are you sure you want to exit?", OK, CANCEL);
 
-        alert.setTitle("Exit the Inventory system");
+        alert.setTitle("Exit the inventory system");
         Optional<ButtonType> result = alert.showAndWait();
         result.ifPresent(res -> {
             if (res.equals(OK)) {

@@ -11,73 +11,69 @@
 
 <AnchorPane prefHeight="468.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16"
             xmlns:fx="http://javafx.com/fxml/1">
-    <children>
-        <VBox prefHeight="454.0" prefWidth="600.0" spacing="30">
-            <HBox spacing="60">
-                <Label>Modify Part</Label>
-                <RadioButton fx:id="radioInHouse" onAction="#inHouseListener" selected="true">In-House</RadioButton>
-                <RadioButton fx:id="radioOutsourced" onAction="#outSourcedListener">Outsourced</RadioButton>
-                <padding>
-                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
-                </padding>
-
-            </HBox>
-            <HBox>
-                <VBox spacing="21">
-                    <Label>ID</Label>
-                    <Label>Name</Label>
-                    <Label>Inv</Label>
-                    <Label>Price/Cost</Label>
-                    <Label>Max</Label>
-                    <Label fx:id="radioOption" text="Machine ID">Machine ID</Label>
-                    <padding>
-                        <Insets bottom="50.0" left="20.0" right="20.0" top="30.0"/>
-                    </padding>
-                </VBox>
-                <VBox spacing="10">
-                    <TextField fx:id="partId" editable="false" maxWidth="150" promptText="1"
-                               style="-fx-prompt-text-fill: gray;"/>
-                    <TextField fx:id="partName" maxWidth="150" promptText="Name"/>
-                    <TextField fx:id="partInv" maxWidth="150" promptText="Inv"/>
-                    <TextField fx:id="partPrice" maxWidth="150" promptText="Price"/>
-                    <HBox spacing="20">
-                        <TextField fx:id="partMax" maxWidth="150" promptText="Max"/>
-                        <Label alignment="BOTTOM_CENTER">
-                            Min
-                            <padding>
-                                <Insets top="5.0"/>
-                            </padding>
-                        </Label>
-                        <TextField fx:id="partMin" maxWidth="150" promptText="Min"/>
-
-                    </HBox>
-                    <TextField fx:id="partMachineId" maxWidth="150" promptText="Machine ID"/>
-                    <padding>
-                        <Insets bottom="50.0" left="20.0" right="20.0" top="30.0"/>
-                    </padding>
-                </VBox>
-
-            </HBox>
-
-            <HBox alignment="CENTER_RIGHT" spacing="20">
-                <Button fx:id="savePart" onAction="#saveModifiedPart">
-                    Save
-                </Button>
-                <Button fx:id="cancelPart" onAction="#hideModifyPartsForm">
-                    Cancel
-                </Button>
-
-                <padding>
-                    <Insets right="50.0"/>
-                </padding>
-            </HBox>
+    <VBox prefHeight="454.0" prefWidth="600.0" spacing="30">
+        <HBox spacing="60">
+            <Label>Modify Part</Label>
+            <RadioButton fx:id="radioInHouse" onAction="#inHouseListener" selected="true">In-House</RadioButton>
+            <RadioButton fx:id="radioOutsourced" onAction="#outSourcedListener">Outsourced</RadioButton>
             <padding>
-                <Insets bottom="50.0" left="50.0" right="20.0" top="50.0"/>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
             </padding>
 
-        </VBox>
+        </HBox>
+        <HBox>
+            <VBox spacing="21">
+                <Label>ID</Label>
+                <Label>Name</Label>
+                <Label>Inv</Label>
+                <Label>Price/Cost</Label>
+                <Label>Max</Label>
+                <Label fx:id="radioOption" text="Machine ID">Machine ID</Label>
+                <padding>
+                    <Insets bottom="50.0" left="20.0" right="20.0" top="30.0"/>
+                </padding>
+            </VBox>
+            <VBox spacing="10">
+                <TextField fx:id="partId" editable="false" maxWidth="150" promptText="1"
+                           style="-fx-prompt-text-fill: gray;"/>
+                <TextField fx:id="partName" maxWidth="150" promptText="Name"/>
+                <TextField fx:id="partInv" maxWidth="150" promptText="Inv"/>
+                <TextField fx:id="partPrice" maxWidth="150" promptText="Price"/>
+                <HBox spacing="20">
+                    <TextField fx:id="partMax" maxWidth="150" promptText="Max"/>
+                    <Label alignment="BOTTOM_CENTER">
+                        Min
+                        <padding>
+                            <Insets top="5.0"/>
+                        </padding>
+                    </Label>
+                    <TextField fx:id="partMin" maxWidth="150" promptText="Min"/>
 
-    </children>
+                </HBox>
+                <TextField fx:id="partMachineId" maxWidth="150" promptText="Machine ID"/>
+                <padding>
+                    <Insets bottom="50.0" left="20.0" right="20.0" top="30.0"/>
+                </padding>
+            </VBox>
 
+        </HBox>
+
+        <HBox alignment="CENTER_RIGHT" spacing="20">
+            <Button fx:id="savePart" onAction="#saveModifiedPart">
+                Save
+            </Button>
+            <Button fx:id="cancelPart" onAction="#hideModifyPartsForm">
+                Cancel
+            </Button>
+
+            <padding>
+                <Insets right="50.0"/>
+            </padding>
+        </HBox>
+        <padding>
+            <Insets bottom="50.0" left="50.0" right="20.0" top="50.0"/>
+        </padding>
+
+    </VBox>
 
 </AnchorPane>

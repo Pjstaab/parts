@@ -102,6 +102,11 @@ public class ModifyProductController implements Initializable {
 
     ObservableList<Part> associatedItems = FXCollections.observableArrayList();
 
+    /**
+     * This is the constructor for the modify product controller and sets the inventory and product
+     * @param inventory
+     * @param product
+     */
     public ModifyProductController(Inventory inventory, Product product) {
         this.inventory = inventory;
         this.product = product;
@@ -119,7 +124,7 @@ public class ModifyProductController implements Initializable {
     /**
      * This method updates text fields with the selected input.
      *
-     * @param product - This is product that has been selected to be modified and updated
+     * @param product This is product that has been selected to be modified and updated
      */
     public void setProduct(Product product) {
         this.product = product;
@@ -167,7 +172,7 @@ public class ModifyProductController implements Initializable {
     }
 
     /**
-     * This method cancels the Modify Products form.
+     * This method cancels the modify Products form.
      *
      */
     public void hideModifyProductsForm(ActionEvent event) {
@@ -224,7 +229,7 @@ public class ModifyProductController implements Initializable {
     /**
      * This method validates that an input is digits.
      *
-     * @param str - Passed string to check whether it is numeric
+     * @param str Passed string to check whether it is numeric
      * @return boolean
      */
     public static boolean isNumeric(String str) {
@@ -262,7 +267,9 @@ public class ModifyProductController implements Initializable {
     }
 
     /**
-     * This method initializes the controller.
+     * This method initializes the controller
+     * @param url
+     * @param resourceBundle
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -304,6 +311,7 @@ public class ModifyProductController implements Initializable {
 
     /**
      * This method saves a modified product and pushes it to main.
+     * @param event
      */
     @FXML
     private void saveModifiedProduct(ActionEvent event) {
@@ -332,6 +340,7 @@ public class ModifyProductController implements Initializable {
 
     /**
      * This is a warning dialog box.
+     * @param err Message to be shown
      */
     private void alertBox(String err) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -344,8 +353,8 @@ public class ModifyProductController implements Initializable {
 
     /**
      * This method checks that the textfields are not empty.
+     * @param ts text fields to be checked
      */
-
     @FXML
     private boolean checkIfEmpty(List<TextField> ts) {
         boolean isEmpty = false;
@@ -358,10 +367,11 @@ public class ModifyProductController implements Initializable {
     }
 
     /**
-     * This method is part of the validation -methods checks for the input values for max,min and inv
-     * max>inv>min
-     *
-     * @return boolean.
+     * This method makes sure that the inventory is between the min and the max and that the min isn't more than max
+     * @param min
+     * @param max
+     * @param inv
+     * @return
      */
     @FXML
     private boolean checkMinMaxInv(int min, int max, int inv) {
@@ -375,8 +385,8 @@ public class ModifyProductController implements Initializable {
 
     /**
      * This method validates strings and integers and doubles as the needed inputs.
+     * @param ts text field to be validated
      */
-
     @FXML
     private boolean validationPassed(List<TextField> ts) {
         boolean isValid = true;
@@ -415,6 +425,11 @@ public class ModifyProductController implements Initializable {
         return isValid;
     }
 
+    /**
+     * This brings the user back to the main screen
+     * @param event
+     * @param product Product to be updated
+     */
     @FXML
     private void mainScreen(ActionEvent event, Product product) {
         try {

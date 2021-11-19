@@ -14,21 +14,19 @@ public class HelloApplication extends Application {
     public void start(Stage stage) throws IOException {
         Inventory inventory = new Inventory();
 
-        inventory.addPart(new InHousePart(1, "Screw", 600.00, 100, 50, 200, 5));
-        inventory.addPart(new OutsourcedPart(2, "Nail", 300.00, 150, 50, 200, "NailedIt Ltd"));
-        inventory.addPart(new InHousePart(3, "Glue", 200.00, 200, 50, 250, 23));
-        inventory.addPart(new InHousePart(4, "Door Knob", 669.00, 250, 50, 300, 32));
-        inventory.addPart(new OutsourcedPart(5, "Hinges", 210.00, 300, 50, 350, "Hinges Inc"));
-        inventory.addPart(new InHousePart(6, "Wrench", 300.00, 350, 50, 400, 76));
-        inventory.addPart(new OutsourcedPart(7, "Locks", 1000.00, 400, 50, 450, "Locks Inc"));
-        inventory.addPart(new InHousePart(8678, "Frames", 10000.00, 450, 50, 500, 87));
-        inventory.addPart(new InHousePart(8, "Cushions", 10000.00, 450, 50, 500, 87));
-        inventory.addPart(new OutsourcedPart(9, "Leather", 100.00, 50, 50, 440, "Skins Ltd"));
-        inventory.addPart(new InHousePart(10, "Soft boards", 150.00, 150, 50, 590, 93));
+        inventory.addPart(new InHousePart(1, "GPU", 1000.00, 20, 10, 200, 9));
+        inventory.addPart(new OutsourcedPart(2, "CPU", 500.00, 100, 10, 300, "AMD"));
+        inventory.addPart(new InHousePart(3, "RAM", 300.00, 100, 50, 250, 420));
+        inventory.addPart(new InHousePart(4, "Motherboard", 300.00, 150, 10, 500, 69));
+        inventory.addPart(new OutsourcedPart(5, "PSU", 200.00, 200, 30, 550, "Seasonic"));
+        inventory.addPart(new InHousePart(6, "Case", 300.00, 250, 20, 300, 123));
+        inventory.addPart(new OutsourcedPart(7, "Fan", 20.00, 300, 10, 850, "Noctua"));
+        inventory.addPart(new InHousePart(8678, "CPU Cooler", 100.00, 450, 20, 900, 321));
+        inventory.addPart(new InHousePart(8, "Mouse", 30.00, 450, 40, 600, 1919));
+        inventory.addPart(new OutsourcedPart(9, "Keyboard", 300.00, 50, 10, 420, "Kono"));
 
-        inventory.addProduct(new Product(1, "Chair", 100.00, 50, 44, 104));
-        inventory.addProduct(new Product(2, "Door", 250.00, 57, 33, 98));
-        inventory.addProduct(new Product(3, "Cabinet", 370.00, 89, 77, 245));
+        inventory.addProduct(new Product(1, "Prebuilt", 1000.00, 54, 34, 124));
+        inventory.addProduct(new Product(2, "Custom", 2500.00, 10, 1, 99));
 
         FXMLLoader          fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/c482/MainInventory.fxml"));
         InventoryController controller = new InventoryController();

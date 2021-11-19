@@ -105,6 +105,10 @@ public class AddProductController implements Initializable {
 
     ObservableList<Part> associatedItems = FXCollections.observableArrayList();
 
+    /**
+     * This is the constructor for adding products and sets the inventory at the same time
+     * @param inventory - this is the inventory of parts and products
+     */
     public AddProductController(Inventory inventory) {
         this.inventory = inventory;
     }
@@ -112,19 +116,18 @@ public class AddProductController implements Initializable {
     /**
      * This method sets the inventory from main.
      *
-     * @param inventory - This is an inventory item
+     * @param inventory - This is the inventory of parts and products
      */
-
     public void setInventory(Inventory inventory) {
         this.inventory = inventory;
     }
 
     /**
-     * This method cancels the product add form if nothing is done
-     * and returns to main view.
+     * This hides the product form and takes the user back to the main page
+     * @param event
      */
     @FXML
-    private void HideAddProductsForm() {
+    private void hideAddProductsForm(ActionEvent event) {
 
         ButtonType OK = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
         ButtonType CANCEL = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
@@ -135,19 +138,7 @@ public class AddProductController implements Initializable {
         Optional<ButtonType> result = alert.showAndWait();
         result.ifPresent(res -> {
             if (res.equals(OK)) {
-                Stage stage;
-                Parent root;
-                stage = (Stage) cancelProduct.getScene().getWindow();
-
-                try {
-                    root = FXMLLoader.load(getClass().getResource("/c482/MainInventory.fxml"));
-                    Scene scene = new Scene(root);
-                    stage.setScene(scene);
-                    stage.show();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
+                mainScreen(event);
             } else {
                 alert.hide();
             }
@@ -155,7 +146,8 @@ public class AddProductController implements Initializable {
     }
 
     /**
-     * this method saves the @param product and pushes to the main view.
+     * This saves the inventory and returns the user to the main screen
+     * @param action
      */
     @FXML
     private void AddNewProduct(ActionEvent action) {
@@ -163,14 +155,15 @@ public class AddProductController implements Initializable {
     }
 
     /**
-     * This method gets the input from the user,validates inputs  and adds it to the inventory.
+     * This adds a new product and performs validation on it
+     * @param action
      */
     @FXML
     private void addProduct(ActionEvent action) {
         List<TextField> textFields = Arrays.asList(productName, productInv, productMax, productMin, productPrice);
         if (!checkIfEmpty(textFields)) {
             if (validationPassed(textFields)) {
-                if (checkMinMAxInv(Integer.parseInt(productMin.getText()), Integer.parseInt(productMax.getText()), Integer.parseInt(productInv.getText()))) {
+                if (checkMinMaxInv(Integer.parseInt(productMin.getText()), Integer.parseInt(productMax.getText()), Integer.parseInt(productInv.getText()))) {
                     Double totalPartsPrice = 0.0;
                     product = new Product(Id,
                             productName.getText(),
@@ -183,7 +176,6 @@ public class AddProductController implements Initializable {
                         for (Part part : associatedItems) {
                             product.addAssociatedPart(part);
                             totalPartsPrice += part.getPrice();
-                            System.out.println(totalPartsPrice);
                         }
 
                         if (product.getPrice() > totalPartsPrice) {
@@ -210,9 +202,9 @@ public class AddProductController implements Initializable {
 
 
     /**
-     * This is a warning dialog box.
+     * This creates an alert box with custom text
+     * @param error
      */
-
     private void alertBox(String error) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Information Dialog");
@@ -223,7 +215,7 @@ public class AddProductController implements Initializable {
     }
 
     /**
-     * This method removes associated parts from product.
+     * This removes an associated part from the product
      */
     @FXML
     private void setRemovePart() {
@@ -235,7 +227,7 @@ public class AddProductController implements Initializable {
     }
 
     /**
-     * This method moves associated part to product.
+     * This adds a part to be associated with a product
      */
     @FXML
     private void setMovePart() {
@@ -264,7 +256,6 @@ public class AddProductController implements Initializable {
                 Part part = inventory.lookupPart(number);
 
                 if (part == null) {
-                    System.out.println("Table is empty");
 
                     partTableView.setItems(null);
                     partTableView.setPlaceholder(new Label("Part Not Found"));
@@ -301,7 +292,6 @@ public class AddProductController implements Initializable {
     /**
      * This method sets up the parts tableview.
      */
-
     private void setPartTableView() {
         partTableView.refresh();
 
@@ -315,7 +305,6 @@ public class AddProductController implements Initializable {
     /**
      * This method sets up the associated parts table view.
      */
-
     private void setAssociatedPartsTable() {
         associatedPartsTable.refresh();
 
@@ -328,9 +317,9 @@ public class AddProductController implements Initializable {
     }
 
     /**
-     * This method generates unique ids for the parts.
+     * This generates a unique id for products
+     * @return a unique id for a product
      */
-
     @FXML
     private Integer generateUniqueNumber() {
 
@@ -349,6 +338,8 @@ public class AddProductController implements Initializable {
 
     /**
      * This method checks that the textfields are not empty.
+     * @param ts This is a text field that has been selected by user to update info
+     * @return
      */
     @FXML
     private boolean checkIfEmpty(List<TextField> ts) {
@@ -367,8 +358,9 @@ public class AddProductController implements Initializable {
 
     /**
      * this method validates strings and integers and doubles as the needed inputs.
+     * @param ts This is a text field that has been selected by user to update info
+     * @return
      */
-
     @FXML
     private boolean validationPassed(List<TextField> ts) {
 
@@ -417,14 +409,14 @@ public class AddProductController implements Initializable {
     }
 
     /**
-     * This method is part of the validation -methods checks for the input values for max,min and inv
-     * max>inv>min
-     *
-     * @return boolean.
+     * This method makes sure that the inventory is between the min and the max and that the min isn't more than max
+     * @param min
+     * @param max
+     * @param inv
+     * @return
      */
-
     @FXML
-    private boolean checkMinMAxInv(int min, int max, int inv) {
+    private boolean checkMinMaxInv(int min, int max, int inv) {
 
         if (inv >= min) {
             return max > inv;
@@ -436,6 +428,8 @@ public class AddProductController implements Initializable {
 
     /**
      * This initializes the controller and the tableview.
+     * @param url
+     * @param resourceBundle
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -446,6 +440,10 @@ public class AddProductController implements Initializable {
         setSearchPart();
     }
 
+    /**
+     * This returns the user to the main screen
+     * @param event
+     */
     @FXML
     private void mainScreen(ActionEvent event) {
         try {
