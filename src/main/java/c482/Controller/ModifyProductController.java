@@ -1,8 +1,3 @@
-/**
- * @author: Pierce Staab
- * The Modify product form
- */
-
 package c482.Controller;
 
 import c482.Model.Inventory;
@@ -29,6 +24,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
+ * @author Pierce Staab
  * This class provides functionality to modify a product.
  */
 

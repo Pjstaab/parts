@@ -1,8 +1,3 @@
-/**
- * @author: Pierce Staab
- * Modify Part Controller
- */
-
 package c482.Controller;
 
 import c482.Model.InHousePart;
@@ -27,6 +22,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
+ * @author Pierce Staab
  * This class provides functionality to modify and edit parts.
  */
 public class ModifyPartController implements Initializable {

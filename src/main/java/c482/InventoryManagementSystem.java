@@ -9,6 +9,11 @@ import c482.Model.*;
 
 import java.io.IOException;
 
+/**
+ * @author Pierce Staab
+ * This is the starting class of the inventory management system
+ *
+ */
 public class InventoryManagementSystem extends Application {
     /**
      * This loads some sample data for the application

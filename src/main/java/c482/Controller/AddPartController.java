@@ -1,10 +1,3 @@
-/**
- * @author: Pierce Staab
- * The Add Part form
- * This class creates a new part and adds it to the inventory
- */
-
-
 package c482.Controller;
 
 import c482.Model.InHousePart;
@@ -26,6 +19,7 @@ import java.net.URL;
 import java.util.*;
 
 /**
+ * @author Pierce Staab
  * This class provides functionality of adding a product.
  */
 public class AddPartController implements Initializable {

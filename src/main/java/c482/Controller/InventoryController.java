@@ -21,6 +21,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
+ * @author Pierce Staab
  * This is the primary controller for the application
  *
  */
