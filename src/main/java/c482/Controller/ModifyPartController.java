@@ -9,9 +9,11 @@ import c482.Model.InHousePart;
 import c482.Model.Inventory;
 import c482.Model.OutsourcedPart;
 import c482.Model.Part;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -90,18 +92,16 @@ public class ModifyPartController implements Initializable {
         partMin.setText(Integer.toString(this.part.getMin()));
         partInv.setText(Integer.toString(this.part.getStock()));
 
-        if (this.part instanceof InHousePart) {
+        if (this.part instanceof InHousePart inHousePart) {
             radioInHouse.setSelected(true);
             radioOutsourced.setSelected(false);
-            InHousePart inHousePart = (InHousePart) this.part;
             radioOption.setText("Machine ID");
             partMachineId.setText(Integer.toString(inHousePart.getMachineId()));
             partMachineId.promptTextProperty().setValue("Machine ID");
 
-        } else {
+        } else if (this.part instanceof OutsourcedPart outsourcedPart) {
             radioInHouse.setSelected(false);
             radioOutsourced.setSelected(true);
-            OutsourcedPart outsourcedPart = (OutsourcedPart) this.part;
             radioOption.setText("Company Name");
             partMachineId.setText(outsourcedPart.getCompanyName());
             partMachineId.promptTextProperty().setValue("Company Name");
@@ -115,9 +115,7 @@ public class ModifyPartController implements Initializable {
      * @param inv This is the inventory
      */
     public void getInventory(Inventory inv) {
-
         this.inventory = inv;
-
     }
 
     /**
@@ -125,24 +123,18 @@ public class ModifyPartController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
         List<TextField> textFields = Arrays.asList(partName, partPrice, partInv, partMin, partMax, partMachineId);
-        textFields.forEach(textField -> {
-            textField.textProperty().addListener((obs, old, newWord) -> {
-                // TODO here
-
-                try {
-
-                    textField.setText(newWord);
-                    setValues(textField);
-                } catch (NumberFormatException e) {
-                    System.out.println("I got you error");
-                }
-
-            });
-        });
-
+        textFields.forEach(textField -> textField.textProperty().addListener((obs, old, newWord) -> {
+            // TODO here
+            try {
+                textField.setText(newWord);
+                setValues(textField);
+            } catch (NumberFormatException e) {
+                System.out.println("I got you error");
+            }
+        }));
     }
+
 
     /**
      * This method gets user input and updates the required fields.
@@ -164,13 +156,9 @@ public class ModifyPartController implements Initializable {
             part.setMin(Integer.parseInt(ts.getText()));
         } else if (ts.getId().equals(partMachineId.getId())) {
 
-            if (part instanceof InHousePart && radioInHouse.isSelected()) {
-
-                InHousePart inHousePart = (InHousePart) part;
+            if (part instanceof InHousePart inHousePart && radioInHouse.isSelected()) {
                 inHousePart.setMachineId(Integer.parseInt(ts.getText()));
-
-            } else if (part instanceof OutsourcedPart && radioOutsourced.isSelected()) {
-                OutsourcedPart outsourced = (OutsourcedPart) part;
+            } else if (part instanceof OutsourcedPart outsourced && radioOutsourced.isSelected()) {
                 outsourced.setCompanyName(ts.getText());
 
             } else if (part instanceof InHousePart && !radioInHouse.isSelected()) {
@@ -206,8 +194,9 @@ public class ModifyPartController implements Initializable {
     @FXML
     private void inHouseListener() {
 
-        if (radioInHouse.isSelected())
+        if (radioInHouse.isSelected()) {
             radioOption.setText("Machine ID");
+        }
         partId.setText(Integer.toString(part.getId()));
         partMachineId.promptTextProperty().setValue("Machine ID");
         radioOutsourced.setSelected(false);
@@ -219,8 +208,9 @@ public class ModifyPartController implements Initializable {
      */
     @FXML
     private void outSourcedListener() {
-        if (radioOutsourced.isSelected())
+        if (radioOutsourced.isSelected()) {
             radioOption.setText("Company Name");
+        }
         partMachineId.promptTextProperty().setValue("Company Name");
         radioInHouse.setSelected(false);
 
@@ -231,29 +221,20 @@ public class ModifyPartController implements Initializable {
      * and returns to main view.
      */
     @FXML
-    private void HideModifyPartsForm() throws IOException {
+    private void hideModifyPartsForm(ActionEvent event) {
 
-        ButtonType OK     = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
-        ButtonType CANCEL = new ButtonType("CANCEl", ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonType OK = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        ButtonType CANCEL = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
         Alert alert = new Alert(Alert.AlertType.WARNING,
-                "Are You Sure You Want cancel Modifying Part", OK, CANCEL);
+                "Are you sure you want to cancel modifying a part?", OK, CANCEL);
 
         alert.setTitle("Exit the Modify Part Form");
         Optional<ButtonType> result = alert.showAndWait();
         result.ifPresent(res -> {
             if (res.equals(OK)) {
-
                 try {
-                    Stage  stage;
-                    Parent root;
-
-                    stage = (Stage) cancelPart.getScene().getWindow();
-                    FXMLLoader loader = new FXMLLoader();
-                    root = loader.load(getClass().getResource("../Inventory_main.fxml"));
-                    Scene scene = new Scene(root);
-                    stage.setScene(scene);
-                    stage.show();
-                } catch (NullPointerException | IOException e) {
+                    mainScreen(event, part);
+                } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
 
@@ -264,41 +245,45 @@ public class ModifyPartController implements Initializable {
 
     }
 
+    @FXML
+    private void mainScreen(ActionEvent event, Part part) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/c482/MainInventory.fxml"));
+            InventoryController controller = new InventoryController();
+            controller.setInventory(inventory);
+            controller.setSelectedPart(part);
+
+            loader.setController(controller);
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+        }
+    }
+
     /**
      * This method saves the modified part and pushes it to the main controller to be updated.
      */
     @FXML
-    private void SaveModifiedPart() throws IOException {
-
-        Parent parent;
-        Stage  stage;
-        stage = (Stage) savePart.getScene().getWindow();
-
+    private void saveModifiedPart(ActionEvent event) {
         List<TextField> textFields = Arrays.asList(partName, partInv, partMax, partMin, partMachineId, partPrice);
-
         if (!checkIfEmpty(textFields)) {
             if (validationPassed(textFields)) {
                 if (checkMinMAxInv(Integer.parseInt(partMin.getText()), Integer.parseInt(partMax.getText()), Integer.parseInt(partInv.getText()))) {
-
                     try {
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("../Inventory_main.fxml"));
-                        parent = loader.load();
-                        Scene scene = new Scene(parent);
-                        stage.setScene(scene);
-                        stage.setTitle("Inventory");
-                        InventoryController controller = loader.getController();
-                        controller.setSelectedPart(part);
+                        mainScreen(event, part);
                     } catch (IndexOutOfBoundsException e) {
                         System.out.println("Item not modified");
                     }
 
                 } else {
-                    alertBox("Min should be less than Max. Inv Should be less than Max and Min");
+                    alertBox("Min should be less than Max. Inv Should be between Max and Min");
                 }
             } else {
-                alertBox("Name should be letters, Inv,Max,Min and Price should be numbers");
+                alertBox("Name should be letters, Inv, Max, Min and Price should be numbers");
             }
-
         } else {
             alertBox("Every Field must be filled");
         }
@@ -352,8 +337,7 @@ public class ModifyPartController implements Initializable {
     }
 
     @FXML
-    private boolean validationPassed(List<TextField> ts) throws IOException {
-
+    private boolean validationPassed(List<TextField> ts) {
         boolean isValid = true;
 
         for (TextField textField : ts) {
@@ -361,48 +345,28 @@ public class ModifyPartController implements Initializable {
             try {
                 if (Id.equals(partInv.getId()) || Id.equals(partMax.getId()) || Id.equals(partMin.getId())) {
                     Integer.valueOf(textField.getText());
-
                 } else if (Id.equals(partPrice.getId())) {
-
                     Double.valueOf(textField.getText());
-
                 } else if (Id.equals(partMachineId.getId())) {
 
                     if (radioInHouse.isSelected()) {
                         Integer.valueOf(textField.getText());
                     }
-
                 } else {
                     Id = textField.getText();
-
                     if (Character.isDigit(Id.charAt(0))) {
-
                         isValid = false;
-
                     } else if (Id.length() > 1) {
                         for (int i = 0; i < Id.length(); i++) {
-                            if (Character.isDigit(Id.charAt(i))) {
-
-                                isValid = false;
-                                return isValid;
-                            } else {
-                                isValid = true;
-                            }
-
+                            isValid = !Character.isDigit(Id.charAt(i));
                         }
                     } else {
                         isValid = true;
-
                     }
-
                 }
-
             } catch (NumberFormatException e) {
-
                 isValid = false;
-
             }
-
         }
 
         return isValid;

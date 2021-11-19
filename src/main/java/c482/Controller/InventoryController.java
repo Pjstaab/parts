@@ -135,26 +135,20 @@ public class InventoryController implements Initializable {
             ObservableList<Product> foundItems = FXCollections.observableArrayList();
 
             if (isNumeric(productSearchField.getText()) && !productSearchField.getText().isEmpty()) {
-                int     number = Integer.parseInt(productSearchField.getText());
-                Product p      = inventory.lookupProduct(number);
+                int number = Integer.parseInt(productSearchField.getText());
+                Product p = inventory.lookupProduct(number);
 
                 if (p == null) {
                     productsTable.setItems(null);
-                    productsTable.setPlaceholder(new Label("Product Not Found"));
-                    alertBox("Part not Found");
                 } else {
                     foundItems.add(p);
                     productsTable.setItems(foundItems);
                 }
 
             } else if (!isNumeric(productSearchField.getText()) && !productSearchField.getText().isEmpty()) {
-                if (inventory.lookupPart(productSearchField.getText()) == null) {
-                    alertBox("Product not Found");
-                } else {
-                    Product product = inventory.lookupProduct(productSearchField.getText());
-                    foundItems.add(product);
-                    productsTable.setItems(foundItems);
-                }
+                Product product = inventory.lookupProduct(productSearchField.getText());
+                foundItems.add(product);
+                productsTable.setItems(foundItems);
             } else {
                 productsTable.setItems(inventory.getAllProducts());
             }
@@ -165,9 +159,9 @@ public class InventoryController implements Initializable {
      * This method initializes the search function and returns the typed Parts input if found.
      * <p>
      * Part G a: This function can result in a logical error where a user is not able to search for both
-     * products using name and id correctly. First,it can result in a number exception error,a return of the
-     * wrong item or no items,or cause the data not to be populated.To fix this - add a listener to the search_field
-     * to listen for changes ,initialize an empty observable array to hold the return values-This is helpful because
+     * products using name and id correctly. First, it can result in a number exception error, a return of the
+     * wrong item or no items, or cause the data not to be populated.To fix this - add a listener to the search_field
+     * to listen for changes, initialize an empty observable array to hold the return values-This is helpful because
      * searching with an part Id only returns a part and the tableview only accepts observable lists Then include the
      * isNumeric function to determine whether the input is a digit or string so that we can use the appropriate functions.
      * Check whether the search_field is empty to avoid the number exception error when trying to convert it to integer.
@@ -179,13 +173,12 @@ public class InventoryController implements Initializable {
             ObservableList<Part> foundItems = FXCollections.observableArrayList();
 
             if (isNumeric(partSearchField.getText()) && !partSearchField.getText().isEmpty()) {
-                int  number = Integer.parseInt(partSearchField.getText());
-                Part part   = inventory.lookupPart(number);
+                int number = Integer.parseInt(partSearchField.getText());
+                Part part = inventory.lookupPart(number);
 
                 if (part == null) {
                     partsTable.setItems(null);
                     partsTable.setPlaceholder(new Label("Part Not Found"));
-                    alertBox("Product not Found");
                 } else {
                     foundItems.add(part);
                     partsTable.setItems(foundItems);
@@ -193,14 +186,9 @@ public class InventoryController implements Initializable {
                 }
 
             } else if (!isNumeric(partSearchField.getText()) && !partSearchField.getText().isEmpty()) {
-                if (inventory.lookupPart(partSearchField.getText()) == null) {
-                    alertBox("Product not Found");
-                } else {
-                    Part part = inventory.lookupPart(partSearchField.getText());
-                    foundItems.add(part);
-                    partsTable.setItems(foundItems);
-                }
-
+                Part part = inventory.lookupPart(partSearchField.getText());
+                foundItems.add(part);
+                partsTable.setItems(foundItems);
             } else {
                 partsTable.setItems(inventory.getAllParts());
             }
@@ -227,16 +215,14 @@ public class InventoryController implements Initializable {
      */
     @FXML
     private void pushToAddPartsForm(ActionEvent event) throws IOException {
-        Parent parent;
-        Stage  stage;
-        stage = (Stage) modifyPart.getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/c482/AddPart.fxml"));
-        parent = loader.load();
+        AddPartController controller = new AddPartController(inventory);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        loader.setController(controller);
+        Parent parent = loader.load();
         Scene scene = new Scene(parent);
         stage.setScene(scene);
         stage.setTitle("Add Part");
-        AddPartController controller = loader.getController();
-        controller.setInventory(this.inventory);
     }
 
     /**
@@ -244,17 +230,15 @@ public class InventoryController implements Initializable {
      */
 
     @FXML
-    private void pushToAddProductsForm() throws IOException {
-        Parent parent;
-        Stage  stage;
-        stage = (Stage) modifyPart.getScene().getWindow();
+    private void pushToAddProductsForm(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/c482/AddProduct.fxml"));
-        parent = loader.load();
+        AddProductController controller = new AddProductController(inventory);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        loader.setController(controller);
+        Parent parent = loader.load();
         Scene scene = new Scene(parent);
         stage.setScene(scene);
         stage.setTitle("Add Product");
-        AddProductController controller = loader.getController();
-        controller.setInventory(inventory);
     }
 
     /**
@@ -262,7 +246,7 @@ public class InventoryController implements Initializable {
      */
     @FXML
     private void pushToModifyPartsForm(ActionEvent event) throws IOException {
-        Part   selectedPart = partsTable.getSelectionModel().getSelectedItem();
+        Part selectedPart = partsTable.getSelectionModel().getSelectedItem();
         if (selectedPart != null) {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/c482/ModifyPart.fxml"));
             ModifyPartController controller = new ModifyPartController(inventory, selectedPart);
@@ -297,18 +281,19 @@ public class InventoryController implements Initializable {
      * This method pushes to the Modify Products form.
      */
     @FXML
-    private void pushToModifyProductsForm() throws IOException {
+    private void pushToModifyProductsForm(ActionEvent event) throws IOException {
+        Product selectedProduct = productsTable.getSelectionModel().getSelectedItem();
         if (productsTable.getSelectionModel().getSelectedItem() != null) {
-            Product selectedProduct = productsTable.getSelectionModel().getSelectedItem();
-            Parent  parent;
-            Stage   stage;
-            stage = (Stage) modifyProduct.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/c482/ModifyProduct.fxml"));
-            parent = loader.load();
+            ModifyProductController controller = new ModifyProductController(inventory, selectedProduct);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            loader.setController(controller);
+            Parent parent = loader.load();
             Scene scene = new Scene(parent);
+
             stage.setScene(scene);
             stage.setTitle("Modify Product");
-            ModifyProductController controller = loader.getController();
+
             controller.setProduct(selectedProduct);
             controller.setInventory(inventory);
         } else {
@@ -358,7 +343,7 @@ public class InventoryController implements Initializable {
      */
     @FXML
     private void exitInventory() {
-        ButtonType OK     = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        ButtonType OK = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
         ButtonType CANCEL = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
         Alert alert = new Alert(Alert.AlertType.WARNING,
                 "Are you sure you want to exit?", OK, CANCEL);

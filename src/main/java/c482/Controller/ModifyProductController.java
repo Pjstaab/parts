@@ -10,9 +10,11 @@ import c482.Model.Part;
 import c482.Model.Product;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -100,6 +102,11 @@ public class ModifyProductController implements Initializable {
 
     ObservableList<Part> associatedItems = FXCollections.observableArrayList();
 
+    public ModifyProductController(Inventory inventory, Product product) {
+        this.inventory = inventory;
+        this.product = product;
+    }
+
     /**
      * This method sets the inventory from main.
      *
@@ -127,7 +134,7 @@ public class ModifyProductController implements Initializable {
         productInv.setText(Integer.toString(this.product.getStock()));
 
         if (this.product.getAllAssociatedParts().isEmpty()) {
-            associatedPartsTable.setPlaceholder(new Label(("No parts associated with this product.Add Parts")));
+            associatedPartsTable.setPlaceholder(new Label(("No parts associated with this product.")));
         } else {
             associatedPartsTable.setItems(this.product.getAllAssociatedParts());
         }
@@ -162,34 +169,19 @@ public class ModifyProductController implements Initializable {
     /**
      * This method cancels the Modify Products form.
      *
-     * @throws IOException This catches an exception thrown during input output operations
      */
-    public void HideModifyProductsForm() throws IOException {
+    public void hideModifyProductsForm(ActionEvent event) {
 
-        ButtonType OK     = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        ButtonType OK = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
         ButtonType CANCEL = new ButtonType("CANCEL", ButtonBar.ButtonData.CANCEL_CLOSE);
         Alert alert = new Alert(Alert.AlertType.WARNING,
-                "Are You Sure You Want cancel Modifying Product", OK, CANCEL);
+                "Are you sure you want to cancel modifying product?", OK, CANCEL);
 
-        alert.setTitle("Exit the Modify Product Form");
+        alert.setTitle("Exit modify part");
         Optional<ButtonType> result = alert.showAndWait();
         result.ifPresent(res -> {
             if (res.equals(OK)) {
-
-                try {
-                    Stage  stage;
-                    Parent root;
-
-                    stage = (Stage) cancelProduct.getScene().getWindow();
-                    FXMLLoader loader = new FXMLLoader();
-                    root = loader.load(getClass().getResource("../Inventory_main.fxml"));
-                    Scene scene = new Scene(root);
-                    stage.setScene(scene);
-                    stage.show();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
+                mainScreen(event, product);
             } else {
                 alert.hide();
             }
@@ -201,14 +193,13 @@ public class ModifyProductController implements Initializable {
      * This method initializes the search function and returns the typed input if found.
      */
     @FXML
-    private void setsearchPart() {
+    private void setSearchPart() {
         searchPart.textProperty().addListener((Obs, oldText, newText) -> {
-
             ObservableList<Part> foundItems = FXCollections.observableArrayList();
 
             if (isNumeric(searchPart.getText()) && !searchPart.getText().isEmpty()) {
-                int  number = Integer.parseInt(searchPart.getText());
-                Part part   = inventory.lookupPart(number);
+                int number = Integer.parseInt(searchPart.getText());
+                Part part = inventory.lookupPart(number);
 
                 if (part == null) {
                     System.out.println("Table is empty");
@@ -216,10 +207,8 @@ public class ModifyProductController implements Initializable {
                     partTableView.setItems(null);
                     partTableView.setPlaceholder(new Label("Part Not Found"));
                 } else {
-
                     foundItems.add(part);
                     partTableView.setItems(foundItems);
-
                 }
 
             } else if (!isNumeric(searchPart.getText()) && !searchPart.getText().isEmpty()) {
@@ -229,7 +218,6 @@ public class ModifyProductController implements Initializable {
             } else {
                 partTableView.setItems(inventory.getAllParts());
             }
-
         });
     }
 
@@ -278,14 +266,11 @@ public class ModifyProductController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         setPartTableView();
         setAssociatedPartsTable();
-        setsearchPart();
+        setSearchPart();
         List<TextField> textFields = Arrays.asList(productName, productPrice, productMin, productMax, productInv);
         textFields.forEach(textField -> textField.textProperty().addListener((obs, old, newWord) -> {
-            // TODO here
-
             try {
                 textField.setText(newWord);
                 setValues(textField);
@@ -321,25 +306,13 @@ public class ModifyProductController implements Initializable {
      * This method saves a modified product and pushes it to main.
      */
     @FXML
-    private void SaveModifiedProduct() throws IOException {
-
-        Parent parent;
-        Stage  stage;
-        stage = (Stage) saveProduct.getScene().getWindow();
+    private void saveModifiedProduct(ActionEvent event) {
         List<TextField> textFields = Arrays.asList(productName, productInv, productMax, productMin, productPrice);
-
         if (!checkIfEmpty(textFields)) {
             if (validationPassed(textFields)) {
-                if (checkMinMAxInv(Integer.parseInt(productMin.getText()), Integer.parseInt(productMax.getText()), Integer.parseInt(productInv.getText()))) {
-
+                if (checkMinMaxInv(Integer.parseInt(productMin.getText()), Integer.parseInt(productMax.getText()), Integer.parseInt(productInv.getText()))) {
                     try {
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("../Inventory_main.fxml"));
-                        parent = loader.load();
-                        Scene scene = new Scene(parent);
-                        stage.setScene(scene);
-                        stage.setTitle("Inventory");
-                        InventoryController controller = loader.getController();
-                        controller.setSelectedProduct(product);
+                        mainScreen(event, product);
                     } catch (IndexOutOfBoundsException e) {
                         System.out.println("Item not modified");
                     }
@@ -375,14 +348,12 @@ public class ModifyProductController implements Initializable {
 
     @FXML
     private boolean checkIfEmpty(List<TextField> ts) {
-
         boolean isEmpty = false;
 
         for (TextField textField : ts) {
             if (textField.getText().trim().length() == 0)
                 isEmpty = true;
         }
-
         return isEmpty;
     }
 
@@ -390,11 +361,10 @@ public class ModifyProductController implements Initializable {
      * This method is part of the validation -methods checks for the input values for max,min and inv
      * max>inv>min
      *
-     * @returns boolean.
+     * @return boolean.
      */
     @FXML
-    private boolean checkMinMAxInv(int min, int max, int inv) {
-
+    private boolean checkMinMaxInv(int min, int max, int inv) {
         if (inv >= min) {
             return max > inv;
         } else {
@@ -409,7 +379,6 @@ public class ModifyProductController implements Initializable {
 
     @FXML
     private boolean validationPassed(List<TextField> ts) {
-
         boolean isValid = true;
 
         for (TextField textField : ts) {
@@ -417,11 +386,8 @@ public class ModifyProductController implements Initializable {
             try {
                 if (Id.equals(productInv.getId()) || Id.equals(productMax.getId()) || Id.equals(productMin.getId())) {
                     Integer.valueOf(textField.getText());
-
                 } else if (Id.equals(productPrice.getId())) {
-
                     Double.valueOf(textField.getText());
-
                 } else {
                     Id = textField.getText();
 
@@ -435,22 +401,35 @@ public class ModifyProductController implements Initializable {
                             } else {
                                 isValid = true;
                             }
-
                         }
                     } else {
                         isValid = true;
                     }
-
                 }
-
             } catch (NumberFormatException e) {
                 isValid = false;
 
             }
-
         }
 
         return isValid;
     }
 
+    @FXML
+    private void mainScreen(ActionEvent event, Product product) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/c482/MainInventory.fxml"));
+            InventoryController controller = new InventoryController();
+            controller.setInventory(inventory);
+            controller.setSelectedProduct(product);
+
+            loader.setController(controller);
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+        }
+    }
 }

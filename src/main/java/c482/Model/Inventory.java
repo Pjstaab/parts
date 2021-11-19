@@ -57,7 +57,7 @@ public class Inventory {
      */
     public Part lookupPart(String partName) {
         for (Part p: allParts) {
-            if (p.getName() == partName) {
+            if (p.getName().toLowerCase().startsWith(partName.toLowerCase())) {
                 return p;
             }
         }
@@ -70,7 +70,7 @@ public class Inventory {
      */
     public Product lookupProduct(String productName) {
         for (Product p: allProducts) {
-            if (p.getName() == productName) {
+            if (p.getName().toLowerCase().startsWith(productName.toLowerCase())) {
                 return p;
             }
         }
@@ -98,7 +98,11 @@ public class Inventory {
      * @return
      */
     public boolean deletePart(Part selectedPart) {
-        return allParts.remove(selectedPart);
+        allParts.remove(selectedPart);
+        for (Product product: allProducts) {
+            product.deleteAssociatedPart(selectedPart);
+        }
+        return true;
     }
 
     /**
@@ -106,7 +110,7 @@ public class Inventory {
      * @return
      */
     public boolean deleteProduct(Product selectedProduct) {
-        return allParts.remove(selectedProduct);
+        return allProducts.remove(selectedProduct);
     }
 
     /**
