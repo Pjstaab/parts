@@ -122,7 +122,7 @@ public class AddPartController implements Initializable {
      * This method cancels the part add form if nothing is done
      * and returns to main view.
      */
-    public void HideAddPartsForm() {
+    public void hideAddPartsForm(ActionEvent event) {
         ButtonType OK = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
         ButtonType CANCEL = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
         Alert alert = new Alert(Alert.AlertType.WARNING,
@@ -132,18 +132,7 @@ public class AddPartController implements Initializable {
         Optional<ButtonType> result = alert.showAndWait();
         result.ifPresent(res -> {
             if (res.equals(OK)) {
-                Stage stage;
-                Parent root;
-                stage = (Stage) cancelPart.getScene().getWindow();
-
-                try {
-                    root = FXMLLoader.load(getClass().getResource("/c482/MainInventory.fxml"));
-                    Scene scene = new Scene(root);
-                    stage.setScene(scene);
-                    stage.show();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                mainScreen(event);
             } else {
                 alert.hide();
             }
