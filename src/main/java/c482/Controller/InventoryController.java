@@ -20,6 +20,10 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/**
+ * This is the primary controller for the application
+ *
+ */
 public class InventoryController implements Initializable {
     //Parts
     @FXML

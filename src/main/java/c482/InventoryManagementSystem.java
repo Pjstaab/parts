@@ -9,7 +9,12 @@ import c482.Model.*;
 
 import java.io.IOException;
 
-public class HelloApplication extends Application {
+public class InventoryManagementSystem extends Application {
+    /**
+     * This loads some sample data for the application
+     * @param stage
+     * @throws IOException
+     */
     @Override
     public void start(Stage stage) throws IOException {
         Inventory inventory = new Inventory();
@@ -28,7 +33,7 @@ public class HelloApplication extends Application {
         inventory.addProduct(new Product(1, "Prebuilt", 1000.00, 54, 34, 124));
         inventory.addProduct(new Product(2, "Custom", 2500.00, 10, 1, 99));
 
-        FXMLLoader          fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/c482/MainInventory.fxml"));
+        FXMLLoader          fxmlLoader = new FXMLLoader(InventoryManagementSystem.class.getResource("/c482/MainInventory.fxml"));
         InventoryController controller = new InventoryController();
         controller.setInventory(inventory);
         fxmlLoader.setController(controller);
@@ -39,6 +44,10 @@ public class HelloApplication extends Application {
         stage.show();
     }
 
+    /**
+     * This is the starting point for the application. Javadocs are located at the root in the folder javadocs
+     * @param args
+     */
     public static void main(String[] args) {
         launch();
     }

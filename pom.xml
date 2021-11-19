@@ -60,7 +60,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>staab.pierce.c482/c482.HelloApplication</mainClass>
+                            <mainClass>staab.pierce.c482/c482.InventoryManagementSystem</mainClass>
                         </configuration>
                     </execution>
                 </executions>
